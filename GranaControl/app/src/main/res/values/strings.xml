@@ -3,6 +3,29 @@
     <string name="usuario">Usuário</string>
     <string name="senha">Senha</string>
     <string name="entrar">Entrar</string>
+    <string name="avancar">Avançar</string>
 
-    <string name="formulario">Formulário</string>
+
+    <string name="anoInicial">Ano Inicial:</string>
+    <string name="mesInicial">Mês Inicial:</string>
+
+    <string name="granaConta">Grana na Conta:</string>
+    <string name="alertaGasto">Alerta de Gasto:</string>
+
+    <string-array name="meses">
+        <item>Janeiro</item>
+        <item>Fevereiro</item>
+        <item>Março</item>
+        <item>Abril</item>
+        <item>Maio</item>
+        <item>Junho</item>
+        <item>Julho</item>
+        <item>Agosto</item>
+        <item>Setembro</item>
+        <item>Outubro</item>
+        <item>Novembro</item>
+        <item>Dezembro</item>
+    </string-array>
+
+
 </resources>

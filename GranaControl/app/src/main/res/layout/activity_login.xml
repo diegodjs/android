@@ -52,6 +52,8 @@
         android:layout_marginTop="6dp"
         android:text="@string/entrar"
         android:textColor="@color/colorTextButton"
+        android:textStyle="bold"
+        android:background="@color/colorButton"
         android:layout_gravity="center"/>
 
 

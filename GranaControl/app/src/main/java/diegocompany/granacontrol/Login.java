@@ -18,9 +18,6 @@ public class Login extends AppCompatActivity {
 
         Button btEntrar = (Button) findViewById(R.id.btEntrar);
         btEntrar.setOnClickListener(onClickEntrar());
-
-        //Button btFormulario = (Button) findViewById(R.id.btFormulario);
-        //btFormulario.setOnClickListener(onClickFormulario());
     }
 
     private View.OnClickListener onClickEntrar() {
@@ -32,16 +29,18 @@ public class Login extends AppCompatActivity {
                 String usuario = tUsuario.getText().toString();
                 String senha = tSenha.getText().toString();
 
-                if ("diego".equals(usuario) && "123".equals(senha)) {
-                    //Intent intent = new Intent(getContext(), BemVindoActivity.class);
-                    //Bundle params = new Bundle();
-                    //params.putString("nome", "Diego José de Souza");
-                    //intent.putExtras(params);
-                    //startActivity(intent);
-                }
-                else {
-                    alert("Deu Ruim!");
-                }
+                //if ("di".equals(usuario) && "1".equals(senha)) {
+                    Intent intent = new Intent(getContext(), Informacoes.class);
+                    Bundle params = new Bundle();
+                    params.putString("nome", "Diego José de Souza");
+                    intent.putExtras(params);
+                    startActivity(intent);
+                    tUsuario.setText("");
+                    tSenha.setText("");
+                //}
+                //else {
+                  //  alert("Deu Ruim!");
+                //}
             }
         };
     }

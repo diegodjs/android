@@ -15,6 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Informacoes" />
+        <activity android:name=".Diario"></activity>
     </application>
 
 </manifest>
