@@ -2,6 +2,7 @@ package diegocompany.granacontrol;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,9 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,51 +29,95 @@ import java.util.List;
 
 public class Informacoes extends AppCompatActivity {
 
-    private NumberPicker npAnoInicial;
-    private Spinner spinnerMes;
+    private NumberPicker npAnoInicial = null;
+    private Spinner sMes = null;
+    private SeekBar sbGranaConta = null;
+    private SeekBar sbAlerta = null;
+    private TextView tvGranaConta = null;
+    private TextView tvAlerta = null;
+    private Button btAvancar = null;
+    private LinearLayout linearLayout = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_informacoes);
 
+        getSupportActionBar().setTitle(R.string.informacoesIniciais);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         npAnoInicial = (NumberPicker) findViewById(R.id.pickerAnoInicial);
         npAnoInicial.setMinValue(Calendar.getInstance().get(Calendar.YEAR));
-        npAnoInicial.setMaxValue(2020);
+        npAnoInicial.setMaxValue(Calendar.getInstance().get(Calendar.YEAR)+3);
         npAnoInicial.setWrapSelectorWheel(true);
 
-        spinnerMes = (Spinner) findViewById(R.id.spinnerMes);
+        sMes = (Spinner) findViewById(R.id.spinnerMes);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.meses, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMes.setAdapter(adapter);
+        sMes.setAdapter(adapter);
 
-        Button btAvancar = (Button) findViewById(R.id.btAvancar);
+        btAvancar = (Button) findViewById(R.id.buttonAvancar);
         btAvancar.setOnClickListener(onClickAvancar());
 
-        getSupportActionBar().setTitle("Informações Iniciais");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        linearLayout = (LinearLayout) findViewById(R.id.linearInformacoes);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            linearLayout.setTransitionName("viewLogin");
+        }
+
+        tvGranaConta = (TextView) findViewById(R.id.editTextGranaConta);
+        sbGranaConta = (SeekBar) findViewById(R.id.seekbarGranaConta);
+        sbGranaConta.setOnSeekBarChangeListener(seekBarChange(tvGranaConta));
+
+        tvAlerta = (TextView) findViewById(R.id.editTextAlerta);
+        sbAlerta = (SeekBar) findViewById(R.id.seekbarAlerta);
+        sbAlerta.setOnSeekBarChangeListener(seekBarChange(tvAlerta));
+    }
+
+
+    private  SeekBar.OnSeekBarChangeListener seekBarChange(final TextView tv) {
+        return new SeekBar.OnSeekBarChangeListener() {
+            double progress = 0.0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                progress = progresValue * 0.10;
+
+                String resultado = String.format("%.2f", progress);
+                tv.setText(resultado);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        };
     }
 
     private View.OnClickListener onClickAvancar() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                npAnoInicial = (NumberPicker) findViewById(R.id.pickerAnoInicial);
-                spinnerMes = (Spinner) findViewById(R.id.spinnerMes);
-                TextView tGrana = (TextView) findViewById(R.id.etGrana);
-                TextView tAlerta = (TextView) findViewById(R.id.etAlerta);
+
+                //npAnoInicial = (NumberPicker) findViewById(R.id.pickerAnoInicial);
+                //sMes = (Spinner) findViewById(R.id.spinnerMes);
+                TextView tGrana = (TextView) findViewById(R.id.editTextGranaConta);
+                TextView tAlerta = (TextView) findViewById(R.id.editTextAlerta);
 
                 String grana = tGrana.getText().toString();
                 String alerta = tAlerta.getText().toString();
 
-                Log.d("TAG", npAnoInicial.getValue() + " - " + spinnerMes.getSelectedItem()
+                Log.d("TAG", npAnoInicial.getValue() + " - " + sMes.getSelectedItem()
                         + " - " + grana  + " - " + alerta);
 
                 Intent intent = new Intent(getContext(), Diario.class);
                 Bundle params = new Bundle();
                 params.putInt("anoInicial", npAnoInicial.getValue());
-                params.putInt("mesInicial", retornaMes(spinnerMes.getSelectedItem().toString()));
+                params.putInt("mesInicial", sMes.getSelectedItemPosition()+1);
 
                 intent.putExtras(params);
                 startActivity(intent);
@@ -96,34 +143,4 @@ public class Informacoes extends AppCompatActivity {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 
-    private int retornaMes(String mes) {
-        switch (spinnerMes.getSelectedItem().toString()) {
-            case "Janeiro":
-                return 1;
-            case "Fevereiro":
-                return 2;
-            case "Março":
-                return 3;
-            case "Abril":
-                return 4;
-            case "Maio":
-                return 5;
-            case "Junho":
-                return 6;
-            case "Julho":
-                return 7;
-            case "Agosto":
-                return 8;
-            case "Setembro":
-                return 9;
-            case "Outubro":
-                return 10;
-            case "Novembro":
-                return 11;
-            case "Dezembro":
-                return 12;
-            default:
-                return 0;
-        }
-    }
 }

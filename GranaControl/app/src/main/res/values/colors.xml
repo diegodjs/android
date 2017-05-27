@@ -8,4 +8,8 @@
 
     <color name="colorTextButton">#ffffff</color>
     <color name="colorButton">#135912</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+
+    <color name="colorProgress">#2b9c29</color>
 </resources>

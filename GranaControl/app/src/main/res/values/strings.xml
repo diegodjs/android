@@ -1,16 +1,18 @@
 <resources>
+
+    <!--Login-->
     <string name="app_name">Grana Control</string>
     <string name="usuario">Usuário</string>
     <string name="senha">Senha</string>
     <string name="entrar">Entrar</string>
-    <string name="avancar">Avançar</string>
 
-
+    <!--Informacoes-->
+    <string name="informacoesIniciais">Informações Iniciais</string>
     <string name="anoInicial">Ano Inicial:</string>
     <string name="mesInicial">Mês Inicial:</string>
-
     <string name="granaConta">Grana na Conta:</string>
     <string name="alertaGasto">Alerta de Gasto:</string>
+    <string name="avancar">Avançar</string>
 
     <string-array name="meses">
         <item>Janeiro</item>
@@ -26,6 +28,12 @@
         <item>Novembro</item>
         <item>Dezembro</item>
     </string-array>
+
+    <!--Diario-->
+    <string name="controleDiario">Controle Diário</string>
+    <string name="entrada">Entrada</string>
+    <string name="saida">Saída</string>
+    <string name="descricao">Descrição</string>
 
 
 </resources>
