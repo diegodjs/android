@@ -1,4 +1,4 @@
-package diegocompany.granacontrol;
+package diegocompany.granacontrol.views;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,23 +9,18 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.NumberPicker;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
+import java.util.Locale;
+
+import diegocompany.granacontrol.R;
 
 public class Informacoes extends AppCompatActivity {
 
@@ -37,6 +32,7 @@ public class Informacoes extends AppCompatActivity {
     private TextView tvAlerta = null;
     private Button btAvancar = null;
     private LinearLayout linearLayout = null;
+    private String usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +42,9 @@ public class Informacoes extends AppCompatActivity {
 
         getSupportActionBar().setTitle(R.string.informacoesIniciais);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Bundle args = getIntent().getExtras();
+        usuario = args.getString("usuario");
 
         npAnoInicial = (NumberPicker) findViewById(R.id.pickerAnoInicial);
         npAnoInicial.setMinValue(Calendar.getInstance().get(Calendar.YEAR));
@@ -84,7 +83,7 @@ public class Informacoes extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
                 progress = progresValue * 0.10;
 
-                String resultado = String.format("%.2f", progress);
+                String resultado = String.format(Locale.ROOT, "%.2f", progress);
                 tv.setText(resultado);
             }
 
@@ -118,6 +117,7 @@ public class Informacoes extends AppCompatActivity {
                 Bundle params = new Bundle();
                 params.putInt("anoInicial", npAnoInicial.getValue());
                 params.putInt("mesInicial", sMes.getSelectedItemPosition()+1);
+                params.putString("usuario", usuario);
 
                 intent.putExtras(params);
                 startActivity(intent);

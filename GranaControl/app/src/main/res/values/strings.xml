@@ -5,6 +5,7 @@
     <string name="usuario">Usuário</string>
     <string name="senha">Senha</string>
     <string name="entrar">Entrar</string>
+    <string name="erroUsuario">Insira Usuário!</string>
 
     <!--Informacoes-->
     <string name="informacoesIniciais">Informações Iniciais</string>
@@ -34,6 +35,10 @@
     <string name="entrada">Entrada</string>
     <string name="saida">Saída</string>
     <string name="descricao">Descrição</string>
+    <string name="remove">Remove</string>
+    <string name="grana">Grana:</string>
+    <string name="avisoValor">Insira um valor!</string>
+    <string name="erroRemover">Erro ao Remover!</string>
 
 
 </resources>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#135912</color>
-    <color name="colorPrimaryDark">#676969</color>
+    <color name="colorPrimaryDark">#0f480e</color>
     <color name="colorAccent">#135912</color>
 
-    <color name="colorBackground">#aeafaf</color>
+    <color name="colorBackground">#c4dd99</color>
+    <!--color name="colorBackground">#cdcdcd</color-->
 
     <color name="colorTextButton">#ffffff</color>
     <color name="colorButton">#135912</color>
@@ -12,4 +13,7 @@
     <color name="colorWhite">#FFFFFF</color>
 
     <color name="colorProgress">#2b9c29</color>
+
+    <color name="colorBlue">#0000ff</color>
+    <color name="colorRed">#9c0000</color>
 </resources>

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "443735677468",
+    "firebase_url": "https://grana-control.firebaseio.com",
+    "project_id": "grana-control",
+    "storage_bucket": "grana-control.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443735677468:android:31ca37ddb3ea1e39",
+        "android_client_info": {
+          "package_name": "diegocompany.granacontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "443735677468-kj7vh18hthb321gke55jvufu34a94gme.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZV_LqABOT9GcBUbtBDryxsmAmeqzeiAk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

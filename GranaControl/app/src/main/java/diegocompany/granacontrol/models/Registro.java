@@ -2,9 +2,10 @@ package diegocompany.granacontrol.models;
 
 import java.io.Serializable;
 
+
 public class Registro implements Serializable{
 
-    private boolean checked;
+    private String id;
     private String entrada;
     private String saida;
     private String descricao;
@@ -12,20 +13,11 @@ public class Registro implements Serializable{
     public Registro() {
     }
 
-    public Registro(boolean checked, String entrada, String saida, String descricao) {
-        this.checked = checked;
+    public Registro(String id, String entrada, String saida, String descricao) {
+        this.id = id;
         this.entrada = entrada;
         this.saida = saida;
         this.descricao = descricao;
-    }
-
-
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
     }
 
     public void setEntrada(String entrada) {
@@ -52,11 +44,19 @@ public class Registro implements Serializable{
         return entrada;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Registro{" +
-                "checked='" + checked + '\'' +
-                "entrada='" + entrada + '\'' +
+                "id=" + id +
+                ", entrada='" + entrada + '\'' +
                 ", saida='" + saida + '\'' +
                 ", descricao='" + descricao + '\'' +
                 '}';

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -28,7 +29,7 @@ public class RegistrosAdapter extends RecyclerView.Adapter<RegistrosAdapter.View
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        CheckBox checkboxReg;
+        Button btRemoveRegistro;
         TextView tvEntrada;
         TextView tvSaida;
         TextView tvDescricao;
@@ -36,7 +37,7 @@ public class RegistrosAdapter extends RecyclerView.Adapter<RegistrosAdapter.View
 
         ViewHolder(View v) {
             super(v);
-            checkboxReg = (CheckBox) v.findViewById(R.id.checkboxReg);
+            btRemoveRegistro = (Button) v.findViewById(R.id.buttonRemoveRegistro);
             tvEntrada = (TextView) v.findViewById(R.id.textViewEntrada);
             tvSaida = (TextView) v.findViewById(R.id.textViewSaida);
             tvDescricao = (TextView) v.findViewById(R.id.textViewDescricao);
@@ -53,10 +54,11 @@ public class RegistrosAdapter extends RecyclerView.Adapter<RegistrosAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.checkboxReg.setChecked(mData.get(position).isChecked());
-        holder.tvEntrada.setText(mData.get(position).getEntrada());
-        holder.tvSaida.setText(mData.get(position).getSaida());
-        holder.tvDescricao.setText(mData.get(position).getDescricao());
+        holder.btRemoveRegistro.setId(position);
+        holder.btRemoveRegistro.setOnClickListener(listener);
+        holder.tvEntrada.setText(mData.get(position) == null ? "" : mData.get(position).getEntrada());
+        holder.tvSaida.setText(mData.get(position) == null ? "" : mData.get(position).getSaida());
+        holder.tvDescricao.setText(mData.get(position) == null ? "" : mData.get(position).getDescricao());
     }
 
     @Override
@@ -73,7 +75,4 @@ public class RegistrosAdapter extends RecyclerView.Adapter<RegistrosAdapter.View
         if (listener != null)
             listener.onClick(v);
     }
-
-
-
 }

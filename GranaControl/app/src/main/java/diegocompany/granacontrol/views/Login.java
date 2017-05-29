@@ -1,18 +1,18 @@
-package diegocompany.granacontrol;
+package diegocompany.granacontrol.views;
 
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import diegocompany.granacontrol.R;
 
 public class Login extends AppCompatActivity {
 
@@ -37,13 +37,28 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getContext(), Informacoes.class);
 
-                ActivityOptions options = retornaOption((View)linearLayout);
+                TextView tUsuario = (TextView) findViewById(R.id.editTextUsuario);
+                String usuario = tUsuario.getText().toString();
 
-                startActivity(intent, options.toBundle());
+                TextView tSenha = (TextView) findViewById(R.id.editTextSenha);
 
+                if (!"".equals(usuario)) {
 
+                    Intent intent = new Intent(getContext(), Informacoes.class);
+                    Bundle params = new Bundle();
+                    params.putString("usuario", usuario);
+                    intent.putExtras(params);
+                    ActivityOptions options = retornaOption((View)linearLayout);
+                    startActivity(intent, options.toBundle());
+
+                    tUsuario.setText("");
+                    tSenha.setText("");
+
+                }
+                else {
+                    alert(R.string.erroUsuario);
+                }
 
 /*
                 TextView tUsuario = (TextView) findViewById(R.id.editTextUsuario);
@@ -81,7 +96,7 @@ public class Login extends AppCompatActivity {
         return this;
     }
 
-    private void alert(String s) {
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    private void alert(int resId) {
+        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
     }
 }

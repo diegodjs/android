@@ -8,15 +8,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login">
+        <activity android:name=".views.Login"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Informacoes" />
-        <activity android:name=".Diario"></activity>
+        <activity android:name=".views.Informacoes" />
+        <activity android:name=".views.Diario"></activity>
     </application>
 
 </manifest>
