@@ -1,35 +1,42 @@
 package diegocompany.granacontrol.views;
 
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import diegocompany.granacontrol.R;
+import diegocompany.granacontrol.utils.ActivityUtil;
 
-public class Login extends AppCompatActivity {
+public class Login extends ActivityUtil {
 
-    Button btEntrar = null;
+    private Button btEntrar = null;
     private LinearLayout linearLayout = null;
+    private TextView tUsuario = null;
+    private String usuario = null;
+    TextView tSenha = null;
+    String senha = null;
+    Intent intent = null;
+    Bundle params = null;
+    ActivityOptions options = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().setTitle(R.string.granaControl);
 
         btEntrar = (Button) findViewById(R.id.buttonEntrar);
         btEntrar.setOnClickListener(onClickEntrar());
 
         linearLayout = (LinearLayout) findViewById(R.id.linearLogin);
-
     }
 
     private View.OnClickListener onClickEntrar() {
@@ -37,28 +44,35 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                tUsuario = (TextView) findViewById(R.id.editTextUsuario);
+                tSenha = (TextView) findViewById(R.id.editTextSenha);
+                usuario = tUsuario.getText().toString();
+                senha = tSenha.getText().toString();
 
-                TextView tUsuario = (TextView) findViewById(R.id.editTextUsuario);
-                String usuario = tUsuario.getText().toString();
-
-                TextView tSenha = (TextView) findViewById(R.id.editTextSenha);
-
-                if (!"".equals(usuario)) {
-
-                    Intent intent = new Intent(getContext(), Informacoes.class);
-                    Bundle params = new Bundle();
-                    params.putString("usuario", usuario);
-                    intent.putExtras(params);
-                    ActivityOptions options = retornaOption((View)linearLayout);
-                    startActivity(intent, options.toBundle());
-
-                    tUsuario.setText("");
-                    tSenha.setText("");
-
+                if (usuario.indexOf(" ") > 0) {
+                    alert(R.string.naoUtilizeEspaco);
+                    return;
                 }
-                else {
-                    alert(R.string.erroUsuario);
+                else if ("".equals(usuario) ){
+
+                    alert(R.string.insiraUsuario);
+                    return;
                 }
+                //else if ("".equals(senha) ){
+
+                   // alert(R.string.insiraSenha);
+                   // return;
+                //}
+
+                intent = new Intent(getContext(), Informacoes.class);
+                params = new Bundle();
+                params.putString("usuario", usuario.toLowerCase());
+                intent.putExtras(params);
+                options = retornaOption((View)linearLayout);
+                startActivity(intent, options.toBundle());
+
+                tUsuario.setText("");
+                tSenha.setText("");
 
 /*
                 TextView tUsuario = (TextView) findViewById(R.id.editTextUsuario);
@@ -83,20 +97,28 @@ public class Login extends AppCompatActivity {
         };
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_informacao, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menuInformacao) {
+            alert(R.string.sobre);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public ActivityOptions retornaOption(View v) {
-        ActivityOptions options = null;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             options = ActivityOptions
                     .makeSceneTransitionAnimation(this, v, "viewLogin");
         }
         return options;
-    }
-
-    private Context getContext() {
-        return this;
-    }
-
-    private void alert(int resId) {
-        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
     }
 }

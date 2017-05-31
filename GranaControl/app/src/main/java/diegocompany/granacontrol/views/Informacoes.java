@@ -1,12 +1,9 @@
 package diegocompany.granacontrol.views;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,14 +12,13 @@ import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.Locale;
 
 import diegocompany.granacontrol.R;
+import diegocompany.granacontrol.utils.ActivityUtil;
 
-public class Informacoes extends AppCompatActivity {
+public class Informacoes extends ActivityUtil {
 
     private NumberPicker npAnoInicial = null;
     private Spinner sMes = null;
@@ -74,29 +70,6 @@ public class Informacoes extends AppCompatActivity {
         sbAlerta.setOnSeekBarChangeListener(seekBarChange(tvAlerta));
     }
 
-
-    private  SeekBar.OnSeekBarChangeListener seekBarChange(final TextView tv) {
-        return new SeekBar.OnSeekBarChangeListener() {
-            double progress = 0.0;
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                progress = progresValue * 0.10;
-
-                String resultado = String.format(Locale.ROOT, "%.2f", progress);
-                tv.setText(resultado);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        };
-    }
-
     private View.OnClickListener onClickAvancar() {
         return new View.OnClickListener() {
             @Override
@@ -124,23 +97,4 @@ public class Informacoes extends AppCompatActivity {
             }
         };
     }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private Context getContext() {
-        return this;
-    }
-
-    private void alert(String s) {
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-    }
-
 }

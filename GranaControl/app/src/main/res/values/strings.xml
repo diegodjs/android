@@ -1,11 +1,20 @@
 <resources>
 
     <!--Login-->
-    <string name="app_name">Grana Control</string>
+    <string name="app_name">GranaControl</string>
+    <string name="granaControl">Grana Control</string>
     <string name="usuario">Usuário</string>
     <string name="senha">Senha</string>
     <string name="entrar">Entrar</string>
-    <string name="erroUsuario">Insira Usuário!</string>
+    <string name="insiraUsuario">Insira Usuário!</string>
+    <string name="insiraSenha">Insira Senha!</string>
+    <string name="naoUtilizeEspaco">Não utilize espaços!</string>
+    <string name="menuInformacao">Informação</string>
+    <string name="sobre">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            Grana Control \n
+                            &#160;&#160;Te ajuda controlar sua grana, \n
+                            e a não ficar devendo as cueca! \n \n
+                            APP by Diego Mobile Solutions</string>
 
     <!--Informacoes-->
     <string name="informacoesIniciais">Informações Iniciais</string>
@@ -31,7 +40,7 @@
     </string-array>
 
     <!--Diario-->
-    <string name="controleDiario">Controle Diário</string>
+    <string name="controleDiario">Controle</string>
     <string name="entrada">Entrada</string>
     <string name="saida">Saída</string>
     <string name="descricao">Descrição</string>
@@ -39,6 +48,7 @@
     <string name="grana">Grana:</string>
     <string name="avisoValor">Insira um valor!</string>
     <string name="erroRemover">Erro ao Remover!</string>
+    <string name="menuRelatorio">Relatório</string>
 
 
 </resources>
