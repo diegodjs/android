@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import diegocompany.granacontrol.R;
 import diegocompany.granacontrol.utils.ActivityUtil;
 
@@ -24,7 +27,6 @@ public class Login extends ActivityUtil {
     String senha = null;
     Intent intent = null;
     Bundle params = null;
-    ActivityOptions options = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class Login extends ActivityUtil {
         btEntrar.setOnClickListener(onClickEntrar());
 
         linearLayout = (LinearLayout) findViewById(R.id.linearLogin);
+
     }
 
     private View.OnClickListener onClickEntrar() {
@@ -58,41 +61,20 @@ public class Login extends ActivityUtil {
                     alert(R.string.insiraUsuario);
                     return;
                 }
-                //else if ("".equals(senha) ){
+                else if ("".equals(senha) ){
 
-                   // alert(R.string.insiraSenha);
-                   // return;
-                //}
+                    alert(R.string.insiraSenha);
+                    return;
+                }
 
                 intent = new Intent(getContext(), Informacoes.class);
                 params = new Bundle();
                 params.putString("usuario", usuario.toLowerCase());
                 intent.putExtras(params);
-                options = retornaOption((View)linearLayout);
-                startActivity(intent, options.toBundle());
+                startActivity(intent);
 
                 tUsuario.setText("");
                 tSenha.setText("");
-
-/*
-                TextView tUsuario = (TextView) findViewById(R.id.editTextUsuario);
-                TextView tSenha = (TextView) findViewById(R.id.editTextSenha);
-                String usuario = tUsuario.getText().toString();
-                String senha = tSenha.getText().toString();
-
-                //if ("di".equals(usuario) && "1".equals(senha)) {
-                    Intent intent = new Intent(getContext(), Informacoes.class);
-                    Bundle params = new Bundle();
-                    params.putString("nome", "Diego José de Souza");
-                    intent.putExtras(params);
-                    startActivity(intent);
-                    tUsuario.setText("");
-                    tSenha.setText("");
-                //}
-                //else {
-                  //  alert("Deu Ruim!");
-                //}
-                */
             }
         };
     }
@@ -113,12 +95,4 @@ public class Login extends ActivityUtil {
         return super.onOptionsItemSelected(item);
     }
 
-    public ActivityOptions retornaOption(View v) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            options = ActivityOptions
-                    .makeSceneTransitionAnimation(this, v, "viewLogin");
-        }
-        return options;
-    }
 }

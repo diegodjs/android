@@ -1,5 +1,6 @@
 package diegocompany.granacontrol.views;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,7 +21,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 
 import diegocompany.granacontrol.R;
@@ -32,8 +32,8 @@ import diegocompany.granacontrol.utils.ActivityUtil;
 public class Diario extends ActivityUtil {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference dataRef;
-    private RecyclerView rvTable;
+    private DatabaseReference dataRefDiario;
+    private RecyclerView rvTableDiario;
     private List<Registro> registros = new ArrayList<Registro>();;
     private ControleDiario controleDiario = new ControleDiario();;
     private FloatingActionButton btEntrada;
@@ -45,9 +45,13 @@ public class Diario extends ActivityUtil {
     private TextView tDescricao = null;
     private String grana = null;
     private String descricao;
-    Registro registro = null;
+    private Registro registro = null;
     private static final String TIPO_ENTRADA = "ENTRADA";
     private static final String TIPO_SAIDA = "SAIDA";
+    private Calendar calendar = null;
+    String ano = null;
+    String mes = null;
+    String dia = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +62,17 @@ public class Diario extends ActivityUtil {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle args = getIntent().getExtras();
-        //int anoInicial = args.getInt("anoInicial");
-        //int mesInicial = args.getInt("mesInicial");
-
 
         usuario = args.getString("usuario");
 
-        getSupportActionBar().setTitle(getSupportActionBar().getTitle()
-                + " - " + Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-                + "/" + (Calendar.getInstance().get(Calendar.MONTH) + 1)
-                + "/" + Calendar.getInstance().get(Calendar.YEAR));
+        calendar = Calendar.getInstance();
+        ano = String.valueOf(calendar.get(Calendar.YEAR));
+        mes = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+        dia = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
 
-                btEntrada = (FloatingActionButton) findViewById(R.id.buttonEntrada);
+        getSupportActionBar().setTitle(getSupportActionBar().getTitle() + " - " + dia + "/" + mes + "/" + ano);
+
+        btEntrada = (FloatingActionButton) findViewById(R.id.buttonEntrada);
         btEntrada.setOnClickListener(onClickEntrada());
 
         btSaida = (FloatingActionButton) findViewById(R.id.buttonSaida);
@@ -81,42 +84,43 @@ public class Diario extends ActivityUtil {
 
         tDescricao = (TextView) findViewById(R.id.editTextDescricao);
 
-        dataRef = database.getReference(usuario);
+        dataRefDiario = database.getReference(usuario);
 
-        rvTable = (RecyclerView) findViewById(R.id.rvTable);
-        setRecyclerView(controleDiario);
+        rvTableDiario = (RecyclerView) findViewById(R.id.rvTableDiario);
 
-        dataRef.addValueEventListener(new ValueEventListener() {
+        dataRefDiario.addValueEventListener(returnDataDiario());
+
+        setRecyclerViewDiario(controleDiario);
+
+    }
+
+    private ValueEventListener returnDataDiario () {
+        return new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-
-                for (Iterator it = children.iterator(); it.hasNext(); ) {
-                    DataSnapshot obj = (DataSnapshot) it.next();
-                    controleDiario = obj.getValue(ControleDiario.class);
-                }
+                controleDiario = dataSnapshot.child("controle").child(ano)
+                        .child(mes)
+                        .child(dia).getValue(ControleDiario.class);
 
                 if (controleDiario == null ){
                     controleDiario = new ControleDiario();
                 }
 
-                setRecyclerView(controleDiario);
+                setRecyclerViewDiario(controleDiario);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
             }
-
-        });
-
+        };
     }
 
-    private void setRecyclerView(ControleDiario controle) {
+    private void setRecyclerViewDiario(ControleDiario controle) {
 
-        rvTable.setHasFixedSize(true);
+        rvTableDiario.setHasFixedSize(true);
         StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        rvTable.setLayoutManager(mLayoutManager);
+        rvTableDiario.setLayoutManager(mLayoutManager);
 
         RegistrosAdapter registrosAdapter = new RegistrosAdapter(controle.getRegistros(), Diario.this);
 
@@ -128,8 +132,8 @@ public class Diario extends ActivityUtil {
             }
         });
 
-        rvTable.setAdapter(registrosAdapter);
-        rvTable.setItemAnimator(new DefaultItemAnimator());
+        rvTableDiario.setAdapter(registrosAdapter);
+        rvTableDiario.setItemAnimator(new DefaultItemAnimator());
     }
 
     private View.OnClickListener onClickEntrada() {
@@ -155,7 +159,7 @@ public class Diario extends ActivityUtil {
         grana = tvGrana.getText().toString();
         descricao = tDescricao.getText().toString();
 
-        if (grana == null || "".equals(grana)) {
+        if (grana == null || "".equals(grana) || "0.00".equals(grana)) {
             alert(R.string.avisoValor);
             return;
         }
@@ -174,7 +178,11 @@ public class Diario extends ActivityUtil {
         registros.add(registro);
         controleDiario.setRegistros(registros);
 
-        dataRef.child("controleDiario_123").setValue(controleDiario);
+        dataRefDiario.child("controle")
+                .child(ano)
+                .child(mes)
+                .child(dia)
+                .setValue(controleDiario);
     }
 
     public void delete(int posicaoRegistro) {
@@ -191,7 +199,11 @@ public class Diario extends ActivityUtil {
 
         controleDiario.setRegistros(registros);
 
-        dataRef.child("controleDiario_123").setValue(controleDiario);
+        dataRefDiario.child("controle")
+                .child(ano)
+                .child(mes)
+                .child(dia)
+                .setValue(controleDiario);
     }
 
     @Override
@@ -204,6 +216,13 @@ public class Diario extends ActivityUtil {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menuRelatorio) {
+
+            Intent intent = new Intent(getContext(), RelatorioGeral.class);
+            Bundle params = new Bundle();
+            params.putString("usuario", usuario);
+
+            intent.putExtras(params);
+            startActivity(intent);
 
             return true;
         }

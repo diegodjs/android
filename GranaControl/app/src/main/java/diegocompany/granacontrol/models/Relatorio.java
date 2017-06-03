@@ -6,45 +6,37 @@ package diegocompany.granacontrol.models;
 
 public class Relatorio {
 
-    private int ano;
-    private int mes;
-    private int dia;
+    private String ano;
+    private String mes;
     private String totalEntrada;
     private String totalSaida;
+    private String totalGeral;
 
     public Relatorio() {
     }
 
-    public Relatorio(int ano, int mes, int dia, String totalEntrada, String totalSaida) {
+    public Relatorio(String ano, String mes, String totalEntrada, String totalSaida, String totalGeral) {
         this.ano = ano;
         this.mes = mes;
-        this.dia = dia;
         this.totalEntrada = totalEntrada;
         this.totalSaida = totalSaida;
+        this.totalGeral = totalGeral;
     }
 
-    public int getAno() {
+    public String getAno() {
         return ano;
     }
 
-    public void setAno(int ano) {
+    public void setAno(String ano) {
         this.ano = ano;
     }
 
-    public int getMes() {
+    public String getMes() {
         return mes;
     }
 
-    public void setMes(int mes) {
+    public void setMes(String mes) {
         this.mes = mes;
-    }
-
-    public int getDia() {
-        return dia;
-    }
-
-    public void setDia(int dia) {
-        this.dia = dia;
     }
 
     public String getTotalEntrada() {
@@ -63,14 +55,22 @@ public class Relatorio {
         this.totalSaida = totalSaida;
     }
 
+    public String getTotalGeral() {
+        return totalGeral;
+    }
+
+    public void setTotalGeral(String totalGeral) {
+        this.totalGeral = totalGeral;
+    }
+
     @Override
     public String toString() {
         return "Relatorio{" +
-                "ano=" + ano +
-                ", mes=" + mes +
-                ", dia=" + dia +
-                ", totalEntrada=" + totalEntrada +
-                ", totalSaida=" + totalSaida +
+                "ano='" + ano + '\'' +
+                ", mes='" + mes + '\'' +
+                ", totalEntrada='" + totalEntrada + '\'' +
+                ", totalSaida='" + totalSaida + '\'' +
+                ", totalGeral='" + totalGeral + '\'' +
                 '}';
     }
 }

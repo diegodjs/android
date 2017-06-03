@@ -26,7 +26,7 @@ public class ActivityUtil extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            finish();
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -69,5 +69,9 @@ public class ActivityUtil extends AppCompatActivity {
 
     public void alert(int resId) {
         Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
+    }
+
+    public void alert(int resId, int duration) {
+        Toast.makeText(this, resId, duration).show();
     }
 }

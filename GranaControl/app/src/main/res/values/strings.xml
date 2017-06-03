@@ -9,6 +9,7 @@
     <string name="insiraUsuario">Insira Usuário!</string>
     <string name="insiraSenha">Insira Senha!</string>
     <string name="naoUtilizeEspaco">Não utilize espaços!</string>
+    <string name="senhaInvalida">Senha inválida!</string>
     <string name="menuInformacao">Informação</string>
     <string name="sobre">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
                             Grana Control \n
@@ -18,8 +19,6 @@
 
     <!--Informacoes-->
     <string name="informacoesIniciais">Informações Iniciais</string>
-    <string name="anoInicial">Ano Inicial:</string>
-    <string name="mesInicial">Mês Inicial:</string>
     <string name="granaConta">Grana na Conta:</string>
     <string name="alertaGasto">Alerta de Gasto:</string>
     <string name="avancar">Avançar</string>
@@ -50,5 +49,21 @@
     <string name="erroRemover">Erro ao Remover!</string>
     <string name="menuRelatorio">Relatório</string>
 
+    <!--RelatorioGeral-->
+    <string name="anoPesquisa">Ano:</string>
+    <string name="mesPesquisa">Mês:</string>
+    <string name="total">Geral</string>
+    <string name="entradaRel">Total Entrada</string>
+    <string name="saidaRel">Total Saída</string>
+    <string name="descricaoRel">Descrição</string>
+    <string name="gerar">Gerar</string>
+    <string name="semRegistros">Não há registros para esta data!</string>
+
+    <string-array name="anos">
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+    </string-array>
 
 </resources>

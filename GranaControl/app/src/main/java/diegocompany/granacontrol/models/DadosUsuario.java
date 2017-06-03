@@ -8,19 +8,15 @@ public class DadosUsuario {
 
     private String usuario;
     private String senha;
-    private int anoInicial;
-    private int mesInicial;
     private String granaConta;
     private String alertaGasto;
 
     public DadosUsuario() {
     }
 
-    public DadosUsuario(String usuario, String senha, int anoInicial, int mesInicial, String granaConta, String alertaGasto) {
+    public DadosUsuario(String usuario, String senha, String granaConta, String alertaGasto) {
         this.usuario = usuario;
         this.senha = senha;
-        this.anoInicial = anoInicial;
-        this.mesInicial = mesInicial;
         this.granaConta = granaConta;
         this.alertaGasto = alertaGasto;
     }
@@ -39,22 +35,6 @@ public class DadosUsuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    public int getAnoInicial() {
-        return anoInicial;
-    }
-
-    public void setAnoInicial(int anoInicial) {
-        this.anoInicial = anoInicial;
-    }
-
-    public int getMesInicial() {
-        return mesInicial;
-    }
-
-    public void setMesInicial(int mesInicial) {
-        this.mesInicial = mesInicial;
     }
 
     public String getGranaConta() {
@@ -78,8 +58,6 @@ public class DadosUsuario {
         return "DadosUsuario{" +
                 "usuario='" + usuario + '\'' +
                 ", senha='" + senha + '\'' +
-                ", anoInicial=" + anoInicial +
-                ", mesInicial=" + mesInicial +
                 ", granaConta=" + granaConta +
                 ", alertaGasto=" + alertaGasto +
                 '}';
