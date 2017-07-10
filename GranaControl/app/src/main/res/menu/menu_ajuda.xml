@@ -4,9 +4,9 @@
     tools:context=".Diario">
 
     <item
-        android:id="@+id/menuRelatorio"
-        android:icon="@drawable/report"
-        android:title="@string/menuRelatorio"
+        android:id="@+id/menuAjuda"
+        android:title="@string/menuAjuda"
+        android:icon="@drawable/help_white"
         app:showAsAction="always" />
 
 </menu>

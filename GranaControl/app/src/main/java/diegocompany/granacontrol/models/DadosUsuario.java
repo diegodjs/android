@@ -6,35 +6,19 @@ package diegocompany.granacontrol.models;
 
 public class DadosUsuario {
 
-    private String usuario;
-    private String senha;
+    //private String usuario;
+    //private String senha;
     private String granaConta;
     private String alertaGasto;
 
     public DadosUsuario() {
     }
 
-    public DadosUsuario(String usuario, String senha, String granaConta, String alertaGasto) {
-        this.usuario = usuario;
-        this.senha = senha;
+    public DadosUsuario(String granaConta, String alertaGasto) {
+        //this.usuario = usuario;
+        //this.senha = senha;
         this.granaConta = granaConta;
         this.alertaGasto = alertaGasto;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
     }
 
     public String getGranaConta() {
@@ -56,8 +40,6 @@ public class DadosUsuario {
     @Override
     public String toString() {
         return "DadosUsuario{" +
-                "usuario='" + usuario + '\'' +
-                ", senha='" + senha + '\'' +
                 ", granaConta=" + granaConta +
                 ", alertaGasto=" + alertaGasto +
                 '}';

@@ -1,5 +1,9 @@
 <resources>
 
+    <string name="facebook_app_id">242135946274395</string>
+
+    <string name="fb_login_protocol_scheme">fb242135946274395</string>
+
     <!--Login-->
     <string name="app_name">GranaControl</string>
     <string name="granaControl">Grana Control</string>
@@ -11,17 +15,18 @@
     <string name="naoUtilizeEspaco">Não utilize espaços!</string>
     <string name="senhaInvalida">Senha inválida!</string>
     <string name="menuInformacao">Informação</string>
-    <string name="sobre">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
-                            Grana Control \n
+    <string name="despedidaLogout">Até logo!</string>
+    <string name="sobre">Grana Control \n
                             &#160;&#160;Te ajuda controlar sua grana, \n
                             e a não ficar devendo as cueca! \n \n
                             APP by Diego Mobile Solutions</string>
 
-    <!--Informacoes-->
-    <string name="informacoesIniciais">Informações Iniciais</string>
-    <string name="granaConta">Grana na Conta:</string>
-    <string name="alertaGasto">Alerta de Gasto:</string>
-    <string name="avancar">Avançar</string>
+    <!--Alertas-->
+    <string name="configuracaoAlertas">Alertas</string>
+    <string name="alertaGastoDiario">Alerta de Gasto Diário:</string>
+    <string name="alertaGastoMensal">Alerta de Gasto Mensal:</string>
+    <string name="salvar">Salvar</string>
+    <string name="alertasConfigurados">Alertas Configurados!</string>
 
     <string-array name="meses">
         <item>Janeiro</item>
@@ -39,7 +44,7 @@
     </string-array>
 
     <!--Diario-->
-    <string name="controleDiario">Controle</string>
+    <string name="controleDiario">Diário</string>
     <string name="entrada">Entrada</string>
     <string name="saida">Saída</string>
     <string name="descricao">Descrição</string>
@@ -48,11 +53,24 @@
     <string name="avisoValor">Insira um valor!</string>
     <string name="erroRemover">Erro ao Remover!</string>
     <string name="menuRelatorio">Relatório</string>
+    <string name="menuConfigAlerta">Alertas</string>
+    <string name="menuAjuda">Ajuda</string>
+    <string name="ajuda">Ajuda - GranaControl \n \n \n
+                            - Utilize o campo "Grana" para valor, \n
+                            para auxiliar no preenchimento deslize a barra. \n \n
+                            - Coloque uma descrição. \n \n
+                            - Para valor recebido utilize o botão "Entrada". \n \n
+                            - Para valor gasto utilize o botão "Saída". \n \n
+                            - Para apagar algum valor utilize a lixeira. \n \n \n
+
+                            Mais dúvidas contate-nos! \n
+                            diegojs@gmail.com</string>
 
     <!--RelatorioGeral-->
+    <string name="relatorioGeral">Relatório Geral</string>
     <string name="anoPesquisa">Ano:</string>
     <string name="mesPesquisa">Mês:</string>
-    <string name="total">Geral</string>
+    <string name="saldo">Saldo</string>
     <string name="entradaRel">Total Entrada</string>
     <string name="saidaRel">Total Saída</string>
     <string name="descricaoRel">Descrição</string>
@@ -65,5 +83,20 @@
         <item>2019</item>
         <item>2020</item>
     </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+
+
+    <!--ALertas-->
+    <string name="alertaMensal">ALERTA DE GASTO MENSAL !!!</string>
+    <string name="alertaDiario">ALERTA DE GASTO DIÁRIO !!!</string>
+
+
+
+    <string name="logoff">Sair</string>
+
+
+
 
 </resources>

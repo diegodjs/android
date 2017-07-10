@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_item_alertas"
+            android:checked="true"
+            android:icon="@drawable/ring_black_white"
+            android:title="@string/configuracaoAlertas" />
+        <item
+            android:id="@+id/nav_item_controle_diario"
+            android:checked="true"
+            android:icon="@drawable/diario_black_white"
+            android:title="@string/controleDiario" />
+        <item
+            android:id="@+id/nav_item_relatorio_geral"
+            android:checked="true"
+            android:icon="@drawable/graphic"
+            android:title="@string/relatorioGeral" />
+        <item
+            android:id="@+id/nav_item_settings"
+            android:icon="@drawable/logoff"
+            android:title="@string/logoff" />
+    </group>
+</menu>

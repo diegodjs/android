@@ -1,6 +1,5 @@
 package diegocompany.granacontrol.views;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -9,42 +8,40 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
 
 import diegocompany.granacontrol.R;
-import diegocompany.granacontrol.adapters.RegistrosAdapter;
 import diegocompany.granacontrol.adapters.TotalAdapter;
 import diegocompany.granacontrol.models.ControleDiario;
+import diegocompany.granacontrol.models.DadosAlertas;
 import diegocompany.granacontrol.models.Registro;
 import diegocompany.granacontrol.models.Relatorio;
 import diegocompany.granacontrol.utils.ActivityUtil;
 
+
 public class RelatorioGeral extends ActivityUtil {
 
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference dataRefRelatorio;
     private Spinner sAnos = null;
     private Spinner sMeses = null;
-    private String usuario;
+    private String id;
     private RecyclerView rvTableRelatorio;
     private Button btGerarRelatorio = null;
     private Relatorio relatorio = new Relatorio();
     private String ano = null;
     private String mes = null;
     private ControleDiario controleDiario = new ControleDiario();
+    private DadosAlertas dadosAlertas = null;
     private List<Registro> registros = null;
 
     @Override
@@ -52,14 +49,15 @@ public class RelatorioGeral extends ActivityUtil {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relatorio_geral);
 
-        getSupportActionBar().setTitle(R.string.informacoesIniciais);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setUpToolbar();
+        setupNavDrawer(R.id.nav_item_relatorio_geral);
 
-        Bundle args = getIntent().getExtras();
-        usuario = args.getString("usuario");
+        getSupportActionBar().setTitle(R.string.relatorioGeral);
+
+        id = profile.getId();
 
         rvTableRelatorio = (RecyclerView) findViewById(R.id.rvTableRelatorio);
-        dataRefRelatorio = database.getReference(usuario);
+        dataRefRelatorio = database.getReference(id);
 
         sAnos = (Spinner) findViewById(R.id.spinnerAnos);
         ArrayAdapter<CharSequence> adapterAnos = ArrayAdapter.createFromResource(this,
@@ -81,14 +79,19 @@ public class RelatorioGeral extends ActivityUtil {
 
     private void setRecyclerViewRelatorio(Relatorio relatorio) {
 
-        rvTableRelatorio.setHasFixedSize(true);
-        StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-        rvTableRelatorio.setLayoutManager(mLayoutManager);
+        if (relatorio == null) {
+            alert(R.string.semRegistros);
+        } else {
 
-        TotalAdapter totalAdapter = new TotalAdapter(relatorio, RelatorioGeral.this);
+            rvTableRelatorio.setHasFixedSize(true);
+            StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+            rvTableRelatorio.setLayoutManager(mLayoutManager);
 
-        rvTableRelatorio.setAdapter(totalAdapter);
-        rvTableRelatorio.setItemAnimator(new DefaultItemAnimator());
+            TotalAdapter totalAdapter = new TotalAdapter(relatorio, RelatorioGeral.this);
+
+            rvTableRelatorio.setAdapter(totalAdapter);
+            rvTableRelatorio.setItemAnimator(new DefaultItemAnimator());
+        }
     }
 
     private View.OnClickListener onClickGerarRelatorio() {
@@ -103,7 +106,7 @@ public class RelatorioGeral extends ActivityUtil {
                 relatorio = new Relatorio();
                 relatorio.setAno(ano);
                 relatorio.setMes(mes);
-                dataRefRelatorio.addValueEventListener(returnDataRelatorio());
+                dataRefRelatorio.addListenerForSingleValueEvent(returnDataRelatorio());
                 setRecyclerViewRelatorio(relatorio);
             }
         };
@@ -114,11 +117,13 @@ public class RelatorioGeral extends ActivityUtil {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+
+                dadosAlertas = dataSnapshot.child("dadosAlertas").getValue(DadosAlertas.class);
+
                 Iterable<DataSnapshot> children = dataSnapshot.child("controle").child(ano).child(mes).getChildren();
 
                 double totalEntrada = 0;
                 double totalSaida = 0;
-                double totalGeral = 0;
                 boolean achouRegistro = false;
 
                 for (Iterator it = children.iterator(); it.hasNext(); ) {
@@ -143,22 +148,26 @@ public class RelatorioGeral extends ActivityUtil {
 
                         totalEntrada += entradaValor;
                         totalSaida += saidaValor;
-
                     }
                 }
 
                 if (!achouRegistro){
-                    relatorio = new Relatorio();
+                    relatorio = null;
                 }
                 else {
                     relatorio = new Relatorio();
-                    relatorio.setTotalEntrada(String.valueOf(totalEntrada));
-                    relatorio.setTotalSaida(String.valueOf(totalSaida));
-                    relatorio.setTotalGeral(String.valueOf(totalEntrada-totalSaida));
+                    relatorio.setTotalEntrada(String.format(Locale.ROOT, "%.2f", totalEntrada));
+                    relatorio.setTotalSaida(String.format(Locale.ROOT, "%.2f", totalSaida));
+                    relatorio.setTotalGeral(String.format(Locale.ROOT, "%.2f", totalEntrada-totalSaida));
+
+                    double alertaMensal = Double.parseDouble(dadosAlertas.getAlertaGastoMensal());
+                    if (totalSaida > alertaMensal) {
+                        showAlertaGasto(ALERTA_MENSAL);
+                    }
                 }
 
-
                 setRecyclerViewRelatorio(relatorio);
+
             }
 
             @Override
@@ -166,6 +175,8 @@ public class RelatorioGeral extends ActivityUtil {
             }
         };
     }
+
+
 
 
 }

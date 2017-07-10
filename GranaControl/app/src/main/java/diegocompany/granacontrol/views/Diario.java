@@ -1,11 +1,12 @@
 package diegocompany.granacontrol.views;
 
-import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -26,20 +26,20 @@ import java.util.List;
 import diegocompany.granacontrol.R;
 import diegocompany.granacontrol.adapters.RegistrosAdapter;
 import diegocompany.granacontrol.models.ControleDiario;
+import diegocompany.granacontrol.models.DadosAlertas;
 import diegocompany.granacontrol.models.Registro;
 import diegocompany.granacontrol.utils.ActivityUtil;
 
 public class Diario extends ActivityUtil {
 
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference dataRefDiario;
+    private DatabaseReference dataRefDiario = null;
     private RecyclerView rvTableDiario;
     private List<Registro> registros = new ArrayList<Registro>();;
     private ControleDiario controleDiario = new ControleDiario();;
-    private FloatingActionButton btEntrada;
-    private FloatingActionButton btSaida;
+    private Button btEntrada;
+    private Button btSaida;
     private Button btRemove;
-    private String usuario;
+    private String id;
     private SeekBar sbGrana = null;
     private TextView tvGrana = null;
     private TextView tDescricao = null;
@@ -49,6 +49,7 @@ public class Diario extends ActivityUtil {
     private static final String TIPO_ENTRADA = "ENTRADA";
     private static final String TIPO_SAIDA = "SAIDA";
     private Calendar calendar = null;
+    private DadosAlertas dadosAlertas = null;
     String ano = null;
     String mes = null;
     String dia = null;
@@ -58,24 +59,25 @@ public class Diario extends ActivityUtil {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diario);
 
+        setUpToolbar();
+        setupNavDrawer(R.id.nav_item_controle_diario);
+
         getSupportActionBar().setTitle(R.string.controleDiario);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Bundle args = getIntent().getExtras();
-
-        usuario = args.getString("usuario");
+        id = profile.getId();
 
         calendar = Calendar.getInstance();
         ano = String.valueOf(calendar.get(Calendar.YEAR));
         mes = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         dia = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
 
-        getSupportActionBar().setTitle(getSupportActionBar().getTitle() + " - " + dia + "/" + mes + "/" + ano);
 
-        btEntrada = (FloatingActionButton) findViewById(R.id.buttonEntrada);
+        getSupportActionBar().setTitle(getSupportActionBar().getTitle() + "   " + dia + "/" + mes + "/" + ano);
+
+        btEntrada = (Button) findViewById(R.id.buttonEntrada);
         btEntrada.setOnClickListener(onClickEntrada());
 
-        btSaida = (FloatingActionButton) findViewById(R.id.buttonSaida);
+        btSaida = (Button) findViewById(R.id.buttonSaida);
         btSaida.setOnClickListener(onClickSaida());
 
         tvGrana = (TextView) findViewById(R.id.editTextGrana);
@@ -84,14 +86,13 @@ public class Diario extends ActivityUtil {
 
         tDescricao = (TextView) findViewById(R.id.editTextDescricao);
 
-        dataRefDiario = database.getReference(usuario);
+        dataRefDiario = database.getReference(id);
 
         rvTableDiario = (RecyclerView) findViewById(R.id.rvTableDiario);
 
         dataRefDiario.addValueEventListener(returnDataDiario());
 
         setRecyclerViewDiario(controleDiario);
-
     }
 
     private ValueEventListener returnDataDiario () {
@@ -99,12 +100,17 @@ public class Diario extends ActivityUtil {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                dadosAlertas = dataSnapshot.child("dadosAlertas").getValue(DadosAlertas.class);
+
                 controleDiario = dataSnapshot.child("controle").child(ano)
                         .child(mes)
                         .child(dia).getValue(ControleDiario.class);
 
                 if (controleDiario == null ){
                     controleDiario = new ControleDiario();
+                }
+                else {
+                    registros = controleDiario.getRegistros();
                 }
 
                 setRecyclerViewDiario(controleDiario);
@@ -183,6 +189,8 @@ public class Diario extends ActivityUtil {
                 .child(mes)
                 .child(dia)
                 .setValue(controleDiario);
+
+        this.showAlertaDiario();
     }
 
     public void delete(int posicaoRegistro) {
@@ -208,25 +216,45 @@ public class Diario extends ActivityUtil {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_relatorio, menu);
+        getMenuInflater().inflate(R.menu.menu_ajuda, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.menuRelatorio) {
+        if (item.getItemId() == R.id.menuAjuda) {
 
-            Intent intent = new Intent(getContext(), RelatorioGeral.class);
-            Bundle params = new Bundle();
-            params.putString("usuario", usuario);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = this.getLayoutInflater();
 
-            intent.putExtras(params);
-            startActivity(intent);
+            builder.setView(inflater.inflate(R.layout.dialog_ajuda, null));
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
 
             return true;
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showAlertaDiario() {
+        double totalSaida = 0;
+        for (Registro registro : registros) {
+            String saida = registro.getSaida();
+            double saidaValor = 0d;
+
+            if (saida != null&& !"".equals(saida)) {
+                saidaValor = Double.parseDouble(saida);
+            }
+
+            totalSaida += saidaValor;
+        }
+
+        double alertaDiario = Double.parseDouble(dadosAlertas.getAlertaGastoDiario());
+        if (totalSaida > alertaDiario) {
+            showAlertaGasto(ALERTA_DIARIO);
+        }
     }
 
 }
