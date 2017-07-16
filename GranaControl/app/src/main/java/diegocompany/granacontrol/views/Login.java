@@ -37,7 +37,7 @@ public class Login extends ActivityUtil {
     private AccessTokenTracker fbTracker;
 
     private CardView cardEntrar = null;
-    private Button btEntrar;
+    private Button btContinuar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +53,9 @@ public class Login extends ActivityUtil {
         callbackManager = CallbackManager.Factory.create();
         loginButton.registerCallback(callbackManager, facebookCallback());
 
-        cardEntrar = (CardView) findViewById(R.id.cardEntrar);
-        btEntrar = (Button) findViewById(R.id.buttonEntrar);
-        btEntrar.setOnClickListener(onClickEntrar());
+        cardEntrar = (CardView) findViewById(R.id.cardContinuar);
+        btContinuar = (Button) findViewById(R.id.buttonContinuar);
+        btContinuar.setOnClickListener(onClickContinuar());
 
         if (profile == null) {
             cardEntrar.setVisibility(View.GONE);
@@ -152,7 +152,7 @@ public class Login extends ActivityUtil {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private View.OnClickListener onClickEntrar() {
+    private View.OnClickListener onClickContinuar() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {

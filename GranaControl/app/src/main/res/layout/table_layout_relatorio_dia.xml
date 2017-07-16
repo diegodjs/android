@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="6dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="4dp"
     card_view:cardCornerRadius="4dp">
 
     <LinearLayout
@@ -16,20 +16,19 @@
 
         <HorizontalScrollView
             android:layout_width="20dp"
-            android:layout_height="30dp"
+            android:layout_height="match_parent"
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/textViewEntradaTotal"
-                android:layout_width="match_parent"
+                android:id="@+id/textViewDia"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:textStyle="bold"
-                android:textColor="@color/colorBlue"/>
+                android:textStyle="bold" />
         </HorizontalScrollView>
 
+        <!-- ############################################ -->
 
         <View
             android:layout_width="1dp"
@@ -40,21 +39,25 @@
             android:layout_marginTop="5dp"
             android:background="@color/cardview_dark_background" />
 
+        <!-- ############################################ -->
+
         <HorizontalScrollView
             android:layout_width="20dp"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/textViewSaidaTotal"
-                android:layout_width="wrap_content"
+                android:id="@+id/textViewEntradaTotalDia"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                android:textColor="@color/colorRed"/>
+                android:textColor="@color/colorBlue"/>
         </HorizontalScrollView>
 
+        <!-- ############################################ -->
 
         <View
             android:layout_width="1dp"
@@ -65,18 +68,21 @@
             android:layout_marginTop="5dp"
             android:background="@color/cardview_dark_background" />
 
+        <!-- ############################################ -->
+
         <HorizontalScrollView
             android:layout_width="20dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/textViewTotalGeral"
+                android:id="@+id/textViewSaidaTotalDia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textAlignment="center"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/colorRed"/>
         </HorizontalScrollView>
 
     </LinearLayout>

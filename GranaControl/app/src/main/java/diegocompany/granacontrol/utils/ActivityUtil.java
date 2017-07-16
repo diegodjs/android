@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
@@ -37,11 +38,10 @@ public class ActivityUtil extends AppCompatActivity {
 
     public final String TAG = "TAG_GRANA_CONTROL";
 
-
-
     public Profile profile = Profile.getCurrentProfile();
 
     public FirebaseDatabase database = FirebaseDatabase.getInstance();
+    public DatabaseReference dataRefDiario = null;
 
     public final int ALERTA_DIARIO = 1;
     public final int ALERTA_MENSAL = 2;
@@ -49,6 +49,14 @@ public class ActivityUtil extends AppCompatActivity {
     protected DrawerLayout drawerLayout;
 
     private Intent intent = new Intent();
+
+    public ActivityUtil () {
+        if (profile != null) {
+            if (dataRefDiario == null) {
+                dataRefDiario = database.getReference(profile.getId());
+            }
+        }
+    }
 
     public Context getContext() {
         return this;
@@ -122,6 +130,7 @@ public class ActivityUtil extends AppCompatActivity {
     // Configura a Toolbar
     protected void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }

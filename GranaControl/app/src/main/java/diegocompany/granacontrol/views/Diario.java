@@ -1,7 +1,9 @@
 package diegocompany.granacontrol.views;
 
-import android.app.Dialog;
+import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -32,14 +35,11 @@ import diegocompany.granacontrol.utils.ActivityUtil;
 
 public class Diario extends ActivityUtil {
 
-    private DatabaseReference dataRefDiario = null;
     private RecyclerView rvTableDiario;
     private List<Registro> registros = new ArrayList<Registro>();;
     private ControleDiario controleDiario = new ControleDiario();;
     private Button btEntrada;
     private Button btSaida;
-    private Button btRemove;
-    private String id;
     private SeekBar sbGrana = null;
     private TextView tvGrana = null;
     private TextView tDescricao = null;
@@ -50,9 +50,14 @@ public class Diario extends ActivityUtil {
     private static final String TIPO_SAIDA = "SAIDA";
     private Calendar calendar = null;
     private DadosAlertas dadosAlertas = null;
-    String ano = null;
-    String mes = null;
-    String dia = null;
+    private ProgressDialog dialog;
+    private int ano = 0;
+    private int mes = 0;
+    private int dia = 0;
+
+    private Button btDate;
+    private DatePickerDialog datePickerDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +67,10 @@ public class Diario extends ActivityUtil {
         setUpToolbar();
         setupNavDrawer(R.id.nav_item_controle_diario);
 
-        getSupportActionBar().setTitle(R.string.controleDiario);
-
-        id = profile.getId();
-
         calendar = Calendar.getInstance();
-        ano = String.valueOf(calendar.get(Calendar.YEAR));
-        mes = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-        dia = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-
-
-        getSupportActionBar().setTitle(getSupportActionBar().getTitle() + "   " + dia + "/" + mes + "/" + ano);
+        ano = calendar.get(Calendar.YEAR);
+        mes = calendar.get(Calendar.MONTH) + 1;
+        dia = calendar.get(Calendar.DAY_OF_MONTH);
 
         btEntrada = (Button) findViewById(R.id.buttonEntrada);
         btEntrada.setOnClickListener(onClickEntrada());
@@ -80,40 +78,55 @@ public class Diario extends ActivityUtil {
         btSaida = (Button) findViewById(R.id.buttonSaida);
         btSaida.setOnClickListener(onClickSaida());
 
+        (findViewById(R.id.linearToolbar)).setVisibility(View.VISIBLE);
+        btDate = (Button) findViewById(R.id.buttonDate);
+        btDate.setOnClickListener(onClickData());
+        btDate.setText(dia + "/" + mes + "/" + ano);
+
         tvGrana = (TextView) findViewById(R.id.editTextGrana);
         sbGrana = (SeekBar) findViewById(R.id.seekbarGrana);
         sbGrana.setOnSeekBarChangeListener(seekBarChange(tvGrana));
 
         tDescricao = (TextView) findViewById(R.id.editTextDescricao);
 
-        dataRefDiario = database.getReference(id);
-
         rvTableDiario = (RecyclerView) findViewById(R.id.rvTableDiario);
 
         dataRefDiario.addValueEventListener(returnDataDiario());
-
-        setRecyclerViewDiario(controleDiario);
     }
 
     private ValueEventListener returnDataDiario () {
         return new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(final DataSnapshot dataSnapshot) {
 
-                dadosAlertas = dataSnapshot.child("dadosAlertas").getValue(DadosAlertas.class);
-
-                controleDiario = dataSnapshot.child("controle").child(ano)
-                        .child(mes)
-                        .child(dia).getValue(ControleDiario.class);
-
-                if (controleDiario == null ){
-                    controleDiario = new ControleDiario();
-                }
-                else {
-                    registros = controleDiario.getRegistros();
+                try {
+                    dialog = ProgressDialog.show(getContext(), "Diário", "Aguarde...", false, true);
+                }catch (Exception e) {
+                    e.getMessage();
                 }
 
-                setRecyclerViewDiario(controleDiario);
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        dadosAlertas = dataSnapshot.child("dadosAlertas").getValue(DadosAlertas.class);
+
+                        controleDiario = dataSnapshot.child("controle").child(String.valueOf(ano))
+                                .child(String.valueOf(mes))
+                                .child(String.valueOf(dia)).getValue(ControleDiario.class);
+
+                        if (controleDiario == null ){
+                            controleDiario = new ControleDiario();
+                        }
+                        else {
+                            registros = controleDiario.getRegistros();
+                        }
+
+                        setRecyclerViewDiario(controleDiario);
+                    }
+                });
+
+                dialog.dismiss();
             }
 
             @Override
@@ -185,12 +198,15 @@ public class Diario extends ActivityUtil {
         controleDiario.setRegistros(registros);
 
         dataRefDiario.child("controle")
-                .child(ano)
-                .child(mes)
-                .child(dia)
+                .child(String.valueOf(ano))
+                .child(String.valueOf(mes))
+                .child(String.valueOf(dia))
                 .setValue(controleDiario);
 
-        this.showAlertaDiario();
+        if (tipoRegistro.equals(TIPO_SAIDA)) {
+            this.showAlertaDiario();
+        }
+
     }
 
     public void delete(int posicaoRegistro) {
@@ -208,10 +224,39 @@ public class Diario extends ActivityUtil {
         controleDiario.setRegistros(registros);
 
         dataRefDiario.child("controle")
-                .child(ano)
-                .child(mes)
-                .child(dia)
+                .child(String.valueOf(ano))
+                .child(String.valueOf(mes))
+                .child(String.valueOf(dia))
                 .setValue(controleDiario);
+    }
+
+    private View.OnClickListener onClickData() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
+                datePickerDialog = new DatePickerDialog(getContext(),
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int anoPicker,
+                                                  int mesPicker, int diaPicker) {
+                                btDate.setText(diaPicker + "/"
+                                        + (mesPicker + 1) + "/" + anoPicker);
+
+                                dia = diaPicker;
+                                mes = (mesPicker + 1);
+                                ano = anoPicker;
+
+                                dataRefDiario.addListenerForSingleValueEvent(returnDataDiario());
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        };
     }
 
     @Override
@@ -255,6 +300,8 @@ public class Diario extends ActivityUtil {
         if (totalSaida > alertaDiario) {
             showAlertaGasto(ALERTA_DIARIO);
         }
+
+
     }
 
 }

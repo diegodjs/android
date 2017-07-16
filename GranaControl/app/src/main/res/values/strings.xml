@@ -9,7 +9,7 @@
     <string name="granaControl">Grana Control</string>
     <string name="usuario">Usuário</string>
     <string name="senha">Senha</string>
-    <string name="entrar">Entrar</string>
+    <string name="continuar">Continuar</string>
     <string name="insiraUsuario">Insira Usuário!</string>
     <string name="insiraSenha">Insira Senha!</string>
     <string name="naoUtilizeEspaco">Não utilize espaços!</string>
@@ -71,6 +71,7 @@
     <string name="anoPesquisa">Ano:</string>
     <string name="mesPesquisa">Mês:</string>
     <string name="saldo">Saldo</string>
+    <string name="dia">Dia</string>
     <string name="entradaRel">Total Entrada</string>
     <string name="saidaRel">Total Saída</string>
     <string name="descricaoRel">Descrição</string>

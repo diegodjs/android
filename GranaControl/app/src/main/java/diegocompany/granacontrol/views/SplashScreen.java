@@ -10,7 +10,7 @@ import diegocompany.granacontrol.utils.ActivityUtil;
 public class SplashScreen extends ActivityUtil {
 
     private Intent intent = null;
-    private static int SPLASH_TIME_OUT = 700;
+    private static int SPLASH_TIME_OUT = 300;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

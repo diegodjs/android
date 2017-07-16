@@ -8,6 +8,7 @@
     android:padding="16dp">
 
 
+
     <Button
         android:id="@+id/buttonWid"
         android:layout_width="130dp"
@@ -17,7 +18,7 @@
         android:background="@color/colorButton"
         android:drawablePadding="2dp"
         android:drawableRight="@drawable/enter"
-        android:text="@string/entrar"
+        android:text="Entrar"
         android:textAlignment="center"
         android:paddingRight="10dp"
         android:textColor="@color/colorTextButton"
