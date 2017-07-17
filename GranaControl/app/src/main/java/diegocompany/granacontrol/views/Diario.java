@@ -36,8 +36,8 @@ import diegocompany.granacontrol.utils.ActivityUtil;
 public class Diario extends ActivityUtil {
 
     private RecyclerView rvTableDiario;
-    private List<Registro> registros = new ArrayList<Registro>();;
-    private ControleDiario controleDiario = new ControleDiario();;
+    private List<Registro> registros = new ArrayList<Registro>();
+    private ControleDiario controleDiario = new ControleDiario();
     private Button btEntrada;
     private Button btSaida;
     private SeekBar sbGrana = null;
@@ -67,10 +67,25 @@ public class Diario extends ActivityUtil {
         setUpToolbar();
         setupNavDrawer(R.id.nav_item_controle_diario);
 
-        calendar = Calendar.getInstance();
-        ano = calendar.get(Calendar.YEAR);
-        mes = calendar.get(Calendar.MONTH) + 1;
-        dia = calendar.get(Calendar.DAY_OF_MONTH);
+
+
+        Bundle args = getIntent().getExtras();
+        boolean isDataEscolhida = false;
+        if (args != null) {
+            isDataEscolhida = args.getBoolean("isDataEscolhida");
+        }
+
+        if (isDataEscolhida) {
+            dia = args.getInt("diaEscolhido");
+            mes = args.getInt("mesEscolhido");
+            ano = args.getInt("anoEscolhido");
+        }
+        else {
+            calendar = Calendar.getInstance();
+            ano = calendar.get(Calendar.YEAR);
+            mes = calendar.get(Calendar.MONTH) + 1;
+            dia = calendar.get(Calendar.DAY_OF_MONTH);
+        }
 
         btEntrada = (Button) findViewById(R.id.buttonEntrada);
         btEntrada.setOnClickListener(onClickEntrada());
@@ -105,9 +120,9 @@ public class Diario extends ActivityUtil {
                     e.getMessage();
                 }
 
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
+                //new Handler().post(new Runnable() {
+                  //  @Override
+                   // public void run() {
 
                         dadosAlertas = dataSnapshot.child("dadosAlertas").getValue(DadosAlertas.class);
 
@@ -123,8 +138,8 @@ public class Diario extends ActivityUtil {
                         }
 
                         setRecyclerViewDiario(controleDiario);
-                    }
-                });
+                    //}
+                //});
 
                 dialog.dismiss();
             }
@@ -251,6 +266,7 @@ public class Diario extends ActivityUtil {
                                 mes = (mesPicker + 1);
                                 ano = anoPicker;
 
+                                registros = new ArrayList<Registro>();
                                 dataRefDiario.addListenerForSingleValueEvent(returnDataDiario());
                             }
                         }, mYear, mMonth, mDay);
@@ -300,7 +316,6 @@ public class Diario extends ActivityUtil {
         if (totalSaida > alertaDiario) {
             showAlertaGasto(ALERTA_DIARIO);
         }
-
 
     }
 

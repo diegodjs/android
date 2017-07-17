@@ -1,5 +1,6 @@
 package diegocompany.granacontrol.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +50,8 @@ public class RelatorioGeral extends ActivityUtil {
     private DadosAlertas dadosAlertas = null;
     private List<Registro> registros = null;
 
+    private List<RelatorioDia> relatorioDiaList = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,19 +98,17 @@ public class RelatorioGeral extends ActivityUtil {
                 relatorio = new Relatorio();
                 relatorio.setAno(ano);
                 relatorio.setMes(mes);
-                dataRefRelatorio.addListenerForSingleValueEvent(returnDataRelatorio());
-                setRecyclerViewRelatorio(relatorio);
+                dataRefRelatorio.addValueEventListener(returnDataRelatorio());
 
-                dataRefRelatorio.addListenerForSingleValueEvent(returnDataRelatorioDia());
+
+                relatorioDiaList = new ArrayList<>();
+                dataRefRelatorio.addValueEventListener(returnDataRelatorioDia());
+
             }
         };
     }
 
     private void setRecyclerViewRelatorio(Relatorio relatorio) {
-
-        if (relatorio == null) {
-            alert(R.string.semRegistros);
-        } else {
 
             rvTableRelatorio.setHasFixedSize(true);
             StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
@@ -117,7 +118,7 @@ public class RelatorioGeral extends ActivityUtil {
 
             rvTableRelatorio.setAdapter(totalAdapter);
             rvTableRelatorio.setItemAnimator(new DefaultItemAnimator());
-        }
+
     }
 
     private ValueEventListener returnDataRelatorio() {
@@ -165,7 +166,8 @@ public class RelatorioGeral extends ActivityUtil {
                 }
 
                 if (!achouRegistro){
-                    relatorio = null;
+                    relatorio = new Relatorio();
+                        alert(R.string.semRegistros);
                 }
                 else {
                     relatorio = new Relatorio();
@@ -190,21 +192,33 @@ public class RelatorioGeral extends ActivityUtil {
     }
 
 
-    private void setRecyclerViewRelatorioDia(List<RelatorioDia> relatorioDia) {
+    private void setRecyclerViewRelatorioDia(List<RelatorioDia> relatorioDiaList) {
 
-        if (relatorioDia.size() <= 0) {
-            alert(R.string.semRegistros);
-        } else {
+        rvTableRelatorioDia.setHasFixedSize(true);
+        StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        rvTableRelatorioDia.setLayoutManager(mLayoutManager);
 
-            rvTableRelatorioDia.setHasFixedSize(true);
-            StaggeredGridLayoutManager mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-            rvTableRelatorioDia.setLayoutManager(mLayoutManager);
+        TotalDiaAdapter totalDiaAdapter = new TotalDiaAdapter(relatorioDiaList, RelatorioGeral.this);
 
-            TotalDiaAdapter totalDiaAdapter = new TotalDiaAdapter(relatorioDia, RelatorioGeral.this);
+        totalDiaAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int i = view.getId();
+                Intent intent = new Intent(getContext(), Diario.class);
+                Bundle params = new Bundle();
+                params.putBoolean("isDataEscolhida", true);
+                params.putInt("diaEscolhido", i);
+                params.putInt("mesEscolhido", Integer.parseInt(mes));
+                params.putInt("anoEscolhido", Integer.parseInt(ano));
+                intent.putExtras(params);
+                startActivity(intent);
+                //finishAfterTransition();
+            }
+        });
 
-            rvTableRelatorioDia.setAdapter(totalDiaAdapter);
-            rvTableRelatorioDia.setItemAnimator(new DefaultItemAnimator());
-        }
+        rvTableRelatorioDia.setAdapter(totalDiaAdapter);
+        rvTableRelatorioDia.setItemAnimator(new DefaultItemAnimator());
+
     }
 
     private ValueEventListener returnDataRelatorioDia() {
@@ -214,8 +228,7 @@ public class RelatorioGeral extends ActivityUtil {
 
                 Iterable<DataSnapshot> children = dataSnapshot.child("controle").child(ano).child(mes).getChildren();
 
-                List<RelatorioDia> relatorioDiaList = new ArrayList<>();
-
+                relatorioDiaList = new ArrayList<>();
 
                 for (Iterator it = children.iterator(); it.hasNext(); ) {
                     DataSnapshot obj = (DataSnapshot) it.next();

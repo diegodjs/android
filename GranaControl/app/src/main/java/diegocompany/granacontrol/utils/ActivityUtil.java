@@ -110,7 +110,11 @@ public class ActivityUtil extends AppCompatActivity {
         }
 
         AlertDialog dialog = builder.create();
-        dialog.show();
+        try {
+            dialog.show();
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 
     public void alert(int resId) {

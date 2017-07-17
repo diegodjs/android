@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -26,13 +27,15 @@ public class TotalDiaAdapter extends RecyclerView.Adapter<TotalDiaAdapter.ViewHo
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDia;
+        //TextView tvDia;
+        Button btDia;
         TextView tvEntradaTotalDia;
         TextView tvSaidaTotalDia;
 
         ViewHolder(View v) {
             super(v);
-            tvDia = (TextView) v.findViewById(R.id.textViewDia);
+            //tvDia = (TextView) v.findViewById(R.id.textViewDia);
+            btDia = (Button) v.findViewById(R.id.buttonDia);
             tvEntradaTotalDia = (TextView) v.findViewById(R.id.textViewEntradaTotalDia);
             tvSaidaTotalDia = (TextView) v.findViewById(R.id.textViewSaidaTotalDia);
 
@@ -48,7 +51,9 @@ public class TotalDiaAdapter extends RecyclerView.Adapter<TotalDiaAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.tvDia.setText(mData.get(position) == null ? "" : mData.get(position).getDia());
+        holder.btDia.setId(mData.get(position) == null ? 0 : Integer.parseInt(mData.get(position).getDia()));
+        holder.btDia.setOnClickListener(listener);
+        holder.btDia.setText(mData.get(position) == null ? "" : mData.get(position).getDia());
         holder.tvEntradaTotalDia.setText(mData.get(position) == null ? "" : mData.get(position).getTotalEntradaDia());
         holder.tvSaidaTotalDia.setText(mData.get(position) == null ? "" : mData.get(position).getTotalSaidaDia());
     }
@@ -56,6 +61,10 @@ public class TotalDiaAdapter extends RecyclerView.Adapter<TotalDiaAdapter.ViewHo
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    public void setOnClickListener(View.OnClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
